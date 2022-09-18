@@ -1,0 +1,36 @@
+{
+  "name": "@jahlgren/react-drawer",
+  "version": "1.0.0",
+  "description": "Simple and easy to use drawer (sidebar) component for React.js.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && tsc && copy src\\index.css dist\\index.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahlgren/react-drawer.git"
+  },
+  "keywords": [
+    "react",
+    "next",
+    "drawer",
+    "sidebar",
+    "component"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jahlgren/react-drawer/issues"
+  },
+  "homepage": "https://github.com/jahlgren/react-drawer#readme",
+  "devDependencies": {
+    "@types/react": "^18.0.20",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.3"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
