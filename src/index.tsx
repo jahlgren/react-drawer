@@ -11,6 +11,8 @@ type DrawerProps = {
 
 type DrawerState = 'open'|'opening'|'closed'|'closing';
 
+const hiddenStyle: React.CSSProperties = {position: 'absolute', width: 0, height: 0, overflow: 'hidden'};
+
 const Drawer: React.FC<DrawerProps> = ({
   open,
   children,
@@ -21,7 +23,7 @@ const Drawer: React.FC<DrawerProps> = ({
   
   const [state, setState] = useState<DrawerState>(open ? 'open' : 'closed');
   const openOrOpeing = state === 'open' || state === 'opening';
-  const containerRef = useRef<HTMLDivElement>(null);
+  const startFocusRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     let timeout: any;
@@ -41,7 +43,7 @@ const Drawer: React.FC<DrawerProps> = ({
   
   const triggerOpen = () => {
     setState('opening');
-    containerRef.current!.focus();
+    startFocusRef.current!.focus();
   }
 
   const triggerClose = () => {
@@ -60,7 +62,6 @@ const Drawer: React.FC<DrawerProps> = ({
 
   return (
     <div 
-      ref={containerRef}
       className="ja-rc-drawer-container"
       style={{ display: (state === 'closed' && !open) ? 'none' : undefined }}
       tabIndex={-1}
@@ -73,6 +74,8 @@ const Drawer: React.FC<DrawerProps> = ({
           transition: `opacity ${transitionDuration/1000}s cubic-bezier(.25, 0, .75, 1)`,
         }}
       />
+      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => startFocusRef.current!.focus()} />
+      <div ref={startFocusRef} aria-hidden tabIndex={0} style={hiddenStyle} />
       <div 
         role="dialog"
         aria-modal
@@ -85,7 +88,7 @@ const Drawer: React.FC<DrawerProps> = ({
       >
         {children}
       </div>
-      <div aria-hidden className="ja-rc-drawer-none" tabIndex={0} onFocus={() => containerRef.current!.focus()} />
+      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => startFocusRef.current!.focus()} />
     </div>
   );
 }

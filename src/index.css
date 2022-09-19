@@ -19,10 +19,3 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 32px -8px rgba(0, 0, 0, 0.25);
   overflow: auto;
 }
-
-.ja-rc-drawer-none {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
