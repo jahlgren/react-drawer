@@ -23,20 +23,20 @@ const Drawer: React.FC<DrawerProps> = ({
   
   const [state, setState] = useState<DrawerState>(open ? 'open' : 'closed');
   const openOrOpeing = state === 'open' || state === 'opening';
+
+  const containerRef = useRef<HTMLDivElement>(null);
   const startFocusRef = useRef<HTMLDivElement>(null);
   const endFocusRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    if(state !== 'open') return;
-    startFocusRef.current!.focus(); 
-  }, []);
 
   useEffect(() => {
     let timeout: any;
     switch(state) {
       // Transitions won't run if we change display and other css properties
       // at the same time. First we need to change display and later the rest.
-      case 'open'   : !open && (timeout = setTimeout(triggerClose, 1)); break;
+      case 'open' :
+        if(open) startFocusRef.current!.focus({preventScroll: true});
+        else     timeout = setTimeout(triggerClose, 1); 
+        break;
       case 'closed' :  open && (timeout = setTimeout(triggerOpen,  1));  break;
       case 'opening': 
       case 'closing': timeout = setTimeout(onTransitionEnd, transitionDuration); break;
@@ -46,6 +46,18 @@ const Drawer: React.FC<DrawerProps> = ({
     document.body.style.width    = openOrOpeing ? `calc(100% - ${scrollbarWidth}px)` : '';
     return timeout ? () => clearTimeout(timeout) : undefined;
   }, [open, state]);
+
+  const onContainerKeyDown: React.KeyboardEventHandler<HTMLDivElement> = e => {
+    const {keyCode, key, shiftKey} = e;
+    const isTab = keyCode === 9 || key === 'Tab';
+    if(!isTab) return;
+
+    if (!shiftKey && document.activeElement === endFocusRef.current) {
+      startFocusRef.current?.focus({ preventScroll: true });
+    } else if (shiftKey && document.activeElement === startFocusRef.current) {
+      endFocusRef.current?.focus({ preventScroll: true });
+    }
+  }
   
   const triggerOpen = () => {
     setState('opening');
@@ -68,9 +80,11 @@ const Drawer: React.FC<DrawerProps> = ({
 
   return (
     <div 
+      ref={containerRef}
       className="ja-rc-drawer-container"
       style={{ display: (state === 'closed' && !open) ? 'none' : undefined }}
       tabIndex={-1}
+      onKeyDown={onContainerKeyDown}
     >
       <div 
         className="ja-rc-drawer-mask"
@@ -80,7 +94,6 @@ const Drawer: React.FC<DrawerProps> = ({
           transition: `opacity ${transitionDuration/1000}s cubic-bezier(.25, 0, .75, 1)`,
         }}
       />
-      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => endFocusRef.current!.focus()} />
       <div ref={startFocusRef} aria-hidden tabIndex={0} style={hiddenStyle} />
       <div 
         role="dialog"
@@ -95,7 +108,6 @@ const Drawer: React.FC<DrawerProps> = ({
         {children}
       </div>
       <div ref={endFocusRef} aria-hidden tabIndex={0} style={hiddenStyle} />
-      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => startFocusRef.current!.focus()} />
     </div>
   );
 }

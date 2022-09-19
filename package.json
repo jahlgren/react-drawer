@@ -1,6 +1,6 @@
 {
   "name": "@jahlgren/react-drawer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple and easy to use drawer (sidebar) component for React.js.",
   "main": "dist/index.js",
   "module": "dist/index.js",
