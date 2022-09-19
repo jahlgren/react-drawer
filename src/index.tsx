@@ -24,7 +24,13 @@ const Drawer: React.FC<DrawerProps> = ({
   const [state, setState] = useState<DrawerState>(open ? 'open' : 'closed');
   const openOrOpeing = state === 'open' || state === 'opening';
   const startFocusRef = useRef<HTMLDivElement>(null);
+  const endFocusRef = useRef<HTMLDivElement>(null);
   
+  useEffect(() => {
+    if(state !== 'open') return;
+    startFocusRef.current!.focus(); 
+  }, []);
+
   useEffect(() => {
     let timeout: any;
     switch(state) {
@@ -74,7 +80,7 @@ const Drawer: React.FC<DrawerProps> = ({
           transition: `opacity ${transitionDuration/1000}s cubic-bezier(.25, 0, .75, 1)`,
         }}
       />
-      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => startFocusRef.current!.focus()} />
+      <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => endFocusRef.current!.focus()} />
       <div ref={startFocusRef} aria-hidden tabIndex={0} style={hiddenStyle} />
       <div 
         role="dialog"
@@ -88,6 +94,7 @@ const Drawer: React.FC<DrawerProps> = ({
       >
         {children}
       </div>
+      <div ref={endFocusRef} aria-hidden tabIndex={0} style={hiddenStyle} />
       <div aria-hidden tabIndex={0} style={hiddenStyle} onFocus={() => startFocusRef.current!.focus()} />
     </div>
   );
