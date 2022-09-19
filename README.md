@@ -41,7 +41,7 @@ import '@jahlgren/react-drawer/dist/index.css';
 |------------|----------------|-----------|----------------|
 | open | boolean | - | **(required)**, open or close drawer |
 | children | any | undefined | drawer content |
-| width | string|number | 300 | width of the drawer |
+| width | string\|number | 300 | width of the drawer |
 | transitionDuration | number | 180 | transition duration in milliseconds |
 | maskClassName | string | undefined | mask css classes |
 | className | string  | undefined | drawer css classes |
