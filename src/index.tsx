@@ -6,6 +6,8 @@ type DrawerProps = {
   children           ?: any,
   width              ?: string|number,
   transitionDuration ?: number,
+  maskClassName      ?: string,
+  className          ?: string,
   onClose            ?: () => void
 }
 
@@ -18,6 +20,8 @@ const Drawer: React.FC<DrawerProps> = ({
   children,
   width = 300,
   transitionDuration = 180,
+  maskClassName,
+  className,
   onClose
 }) => {
   
@@ -87,7 +91,7 @@ const Drawer: React.FC<DrawerProps> = ({
       onKeyDown={onContainerKeyDown}
     >
       <div 
-        className="ja-rc-drawer-mask"
+        className={'ja-rc-drawer-mask' + (maskClassName ? ' ' + maskClassName : '')}
         onClick={onMaskClicked} 
         style={{
           opacity: openOrOpeing ? 1 : 0,
@@ -98,7 +102,7 @@ const Drawer: React.FC<DrawerProps> = ({
       <div 
         role="dialog"
         aria-modal
-        className={"ja-rc-drawer"}
+        className={'ja-rc-drawer' + (className ? ' ' + className : '')}
         style={{
           width,
           transform: openOrOpeing ? 'translateX(0)' : 'translateX(-100%)',
